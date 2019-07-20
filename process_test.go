@@ -6,7 +6,7 @@ import (
 )
 
 func TestFindProcess(t *testing.T) {
-	p, err := FindProcess(os.Getpid())
+	p, err, _ := FindProcess(os.Getpid())
 	if err != nil {
 		t.Fatalf("err: %s", err)
 	}

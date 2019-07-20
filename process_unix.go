@@ -19,6 +19,8 @@ type UnixProcess struct {
 	sid   int
 
 	binary string
+	cmd    string
+	env    []string
 }
 
 func (p *UnixProcess) Pid() int {
@@ -33,15 +35,15 @@ func (p *UnixProcess) Executable() string {
 	return p.binary
 }
 
-func findProcess(pid int) (Process, error) {
+func findProcess(pid int) (Process, error, error) {
 	dir := fmt.Sprintf("/proc/%d", pid)
 	_, err := os.Stat(dir)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return nil, nil
+			return nil, nil, nil
 		}
 
-		return nil, err
+		return nil, err, nil
 	}
 
 	return newUnixProcess(pid)
@@ -82,12 +84,10 @@ func processes() ([]Process, error) {
 			if err != nil {
 				continue
 			}
-
-			p, err := newUnixProcess(int(pid))
+			p, err, _ := newUnixProcess(int(pid))
 			if err != nil {
 				continue
 			}
-
 			results = append(results, p)
 		}
 	}
@@ -95,7 +95,7 @@ func processes() ([]Process, error) {
 	return results, nil
 }
 
-func newUnixProcess(pid int) (*UnixProcess, error) {
+func newUnixProcess(pid int) (*UnixProcess, error, error) {
 	p := &UnixProcess{pid: pid}
-	return p, p.Refresh()
+	return p, p.Refresh(), p.CmdLine()
 }

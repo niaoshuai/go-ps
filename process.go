@@ -35,6 +35,6 @@ func Processes() ([]Process, error) {
 //
 // Process will be nil and error will be nil if a matching process is
 // not found.
-func FindProcess(pid int) (Process, error) {
+func FindProcess(pid int) (Process, error, error) {
 	return findProcess(pid)
 }
