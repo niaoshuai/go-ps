@@ -21,6 +21,8 @@ type Process interface {
 	Executable() string
 
 	Env() []string
+
+	Cmd() string
 }
 
 // Processes returns all processes.
