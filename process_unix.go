@@ -35,6 +35,14 @@ func (p *UnixProcess) Executable() string {
 	return p.binary
 }
 
+func (p *UnixProcess) Env() []string {
+	return p.env
+}
+
+func (p *UnixProcess) Cmd() string {
+	return p.cmd
+}
+
 func findProcess(pid int) (Process, error, error) {
 	dir := fmt.Sprintf("/proc/%d", pid)
 	_, err := os.Stat(dir)
